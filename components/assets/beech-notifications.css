@@ -1,0 +1,82 @@
+.BEECH_notifications {
+    --bch-sn--width : 20rem;
+    --bch-sn--color : black;
+    --bch-sn--accent : white;
+    --bch-sn--background : white;
+}
+
+/* Sidebar Notification */
+.BEECH_notifications--side-bar {
+    max-width: var(--bch-sn--width);
+    background-color: var(--bch-sn--background);
+    color: var(--bch-sn--color);
+
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+
+    box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 10%);
+    transition: all 400ms ease;
+}
+.BEECH_notifications--side-bar a {
+    transition: 150ms ease all;
+    cursor: pointer;
+}
+.BEECH_notifications--side-bar a:hover {
+    opacity: 0.7;
+}
+.BEECH_notifications--side-bar_content {
+    padding: 1rem;
+    position: relative;
+}
+.BEECH_notifications--side-bar_content h5 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    line-height: 1;
+}
+.BEECH_notifications--side-bar_content p {
+    margin: 0;
+}
+
+/* Animations */
+.BEECH_notifications--side-bar {
+    display: none;
+    opacity: 0;
+    transform: translate(0rem, 1rem);
+}
+.BEECH_notifications--side-bar.BEECH__opening, 
+.BEECH_notifications--side-bar.BEECH__open {
+    display: block;
+}
+.BEECH_notifications--side-bar.BEECH__open {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+.BEECH_notifications--side-bar.BEECH__open.BEECH__closing {
+    opacity: 0;
+    transform: translate(0rem, 1rem);
+}
+
+
+/* Close Button */
+.BEECH_notifications--close {
+    display: block;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    --icon--accent : var(--bch-sn--accent);
+    --icon--color : var(--bch-sn--color);
+
+    transition: all 150ms ease;
+}
+.BEECH_notifications--close:hover {
+    --icon--color : var(--bch-sn--accent);
+    --icon--accent : var(--bch-sn--color);
+}
+
+.BEECH_notifications--close:hover svg path, 
+.BEECH_notifications--close:hover svg circle {
+    transition: all 150ms ease;
+}
