@@ -8,6 +8,10 @@
         $id = get_option( 'BEECH_notifications--SIDE_BAR__id' );
         $days = get_option( 'BEECH_notifications--SIDE_BAR__days-dismissed' );
 
+        if(empty($days)) {
+            $days = 30;
+        }
+
         if( $is_enabled ) {
 
             $BEECH_sb_options = array(

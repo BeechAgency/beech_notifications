@@ -4,6 +4,7 @@
 <div class="BEECH_notifications BEECH_notifications--side-bar" 
     data-beech-notification-id="<?= $BEECH_sb_options['id'] ?>" 
     data-beech-notification-days="<?= $BEECH_sb_options['days']; ?>"
+    data-beech-notification-type="side-bar"
     >
     <div class="BEECH_notifications--side-bar_content">
         <a href="<?php echo $BEECH_sb_options['link']; ?>">
