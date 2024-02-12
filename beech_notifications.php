@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://https://github.com/beechagency/
- * @since             1.0
+ * @since             1.1
  * @package           Beech_notifications
  *
  * @wordpress-plugin
  * Plugin Name:       BEECH Notifications
  * Plugin URI:        https://beech.agency
  * Description:       Make some notifications on your site without ads, boat and junk that typically comes with popup and notification plugins.
- * Version:           1.0
+ * Version:           1.1
  * Author:            BEECH Agency
  * Author URI:        https://https://github.com/beechagency//
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'BEECH_NOTIFICATIONS_VERSION', '1.0' );
+define( 'BEECH_NOTIFICATIONS_VERSION', '1.1' );
 
 /**
  * The code that runs during plugin activation.
@@ -86,5 +86,6 @@ function run_beech_notifications() {
 	$updater = new Beech_notifications_updater(__FILE__);
 	$updater->set_username( 'BeechAgency' );
 	$updater->set_repository( 'beech_notifications' );
+	$updater->initialize();
 }
 run_beech_notifications();
