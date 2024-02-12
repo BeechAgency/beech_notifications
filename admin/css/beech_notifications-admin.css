@@ -1,0 +1,161 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.BN__input {
+    display: flex;
+    gap: 10px;
+}
+.BN__input span { width: 6rem; }
+.BN__input > * { width: 100%; }
+
+.BN__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.BN__checkbox input {
+    width: 2rem;
+    height: 2rem;
+    overflow: hidden;
+}
+.BN__checkbox input[type=checkbox]:checked::before {
+    height: 3rem;
+    width: 3rem;
+    margin: 0;
+    translate: -20% -19%;
+}
+
+
+
+ /* Admin */
+ .form-table img {
+    max-width: 220px;
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+}
+.BEECH-preview-image {
+    background: rgb(255,179,11);
+    background: linear-gradient(145deg, rgba(255,179,11,0.1) 0%, rgba(0,0,0,0.1) 100%);
+}
+table.form-table {
+    margin-top: 0;
+}
+.form-table td > div {
+    padding-bottom: 30px;
+}
+
+
+* {box-sizing: border-box}
+
+.tab-menu ul, .tab-menu li {
+    margin: 0;
+    padding: 0;
+}
+
+.tab-list {
+    margin-top: 20px; 
+
+    background-color: #F9F9F9;
+    border: 1px solid #c3c4c7;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+.tab-body-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: stretch;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+}
+.tab-menu {
+    max-width: 180px;
+}
+
+/* Style the tab */
+.tab {
+    /*border: 1px solid #ccc;*/
+    background-color: #F9F9F9;
+    width: 100%;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+    display: block;
+    background-color: inherit;
+    color: #0073aa;
+    padding: 25px 20px;
+    width: 100%;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+
+    border-bottom: 1px solid #DFDFDF;
+    border-right: 1px solid transparent;
+
+    position: relative;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: white;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+    background-color: white;
+    color: black;
+    border-right: 1px solid white;
+}
+.tab button::after {content: "";position: absolute;top: 0;bottom: 0;border: transparent 1px solid;right: -3px;}
+.tab button.active::after {content: "";position: absolute;top: 0;bottom: 0;border: white 1px solid;right: -3px;}
+.tab p.submit { text-align: center; }
+.tab p.submit input { padding: 7px 15px; }
+
+/* Style the tab content */
+.tab-content {
+    padding: 0px 0px;
+    /*border: 1px solid #ccc;*/
+    width: 100%;
+    border-left: 1px solid #DFDFDF;
+    background-color: #ffffff;
+}
+.tab-content h2 {
+    border-bottom: 1px solid #DFDFDF;
+    padding: 15px 20px;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+.form-table tr {
+    border-bottom: 1px solid #DFDFDF;
+}
+.form-table tr:last-child {
+    border-bottom: 1px solid transparent;
+}
+.form-table tr td, .form-table tr th {
+    padding: 25px 20px;
+}
+th span.light {
+    display: block;
+    font-weight: 300;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
