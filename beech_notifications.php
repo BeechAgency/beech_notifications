@@ -1,72 +1,90 @@
 <?php
+
 /**
- * Plugin Name: BEECH Notifications
- * Plugin URI: https://beech.agency
- * Description: Gives you some sweet sweet notifications
- * Version: 0.1
- * Author: BEECH Agency
- * Author URI: https://beech.agency
+ * The plugin bootstrap file
+ *
+ * This file is read by WordPress to generate the plugin information in the plugin
+ * admin area. This file also includes all of the dependencies used by the plugin,
+ * registers the activation and deactivation functions, and defines a function
+ * that starts the plugin.
+ *
+ * @link              https://https://github.com/beechagency/
+ * @since             1.0
+ * @package           Beech_notifications
+ *
+ * @wordpress-plugin
+ * Plugin Name:       BEECH Notifications
+ * Plugin URI:        https://beech.agency
+ * Description:       Make some notifications on your site without ads, boat and junk that typically comes with popup and notification plugins.
+ * Version:           1.0
+ * Author:            BEECH Agency
+ * Author URI:        https://https://github.com/beechagency//
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       beech_notifications
+ * Domain Path:       /languages
  */
 
-if (!defined('ABSPATH')) {
-	exit; // Exit if accessed directly
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
 }
 
-if( ! class_exists( 'BEECH_Updater' ) ){
-	include_once( plugin_dir_path( __FILE__ ) . 'updater.php' );
+/**
+ * Currently plugin version.
+ * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Rename this for your plugin and update it as you release new versions.
+ */
+define( 'BEECH_NOTIFICATIONS_VERSION', '1.0' );
+
+/**
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-beech_notifications-activator.php
+ */
+function activate_beech_notifications() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-beech_notifications-activator.php';
+	Beech_notifications_Activator::activate();
 }
 
-$updater = new BEECH_Updater( __FILE__ );
-$updater->set_username( 'BeechAgency' );
-$updater->set_repository( 'beech_notifications' );
-/*
-	$updater->authorize( 'abcdefghijk1234567890' ); // Your auth code goes here for private repos
-*/
-$updater->initialize();
-
- // Set up settings
-if( !function_exists("BEECH_notifications_init") ) { 
-	function BEECH_notifications_init() {   
-		/* Sidebar Notifications Settings */
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__enabled' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__title' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__description' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__image' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__link' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__id' );
-		register_setting( 'BEECH-notifications-settings', 'BEECH_notifications--SIDE_BAR__days-dismissed' );
-	}
+/**
+ * The code that runs during plugin deactivation.
+ * This action is documented in includes/class-beech_notifications-deactivator.php
+ */
+function deactivate_beech_notifications() {
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-beech_notifications-deactivator.php';
+	Beech_notifications_Deactivator::deactivate();
 }
 
-// Set up menu
-function BEECH_notifications_admin_menu() {
-	 $parent_slug = 'tools.php';
-	 $page_title = 'Beech Notifications';   
-	 $menu_title = 'Beech Notifications';   
-	 $capability = 'manage_options';   
-	 $menu_slug  = 'beech-notifications';  
-	 $function   = 'BEECH_notifications_admin_page';   
-	 $icon_url   = 'dashicons-bell';   
-	 $position   = (int) 10;    
+register_activation_hook( __FILE__, 'activate_beech_notifications' );
+register_deactivation_hook( __FILE__, 'deactivate_beech_notifications' );
 
-	 add_submenu_page( 
-		 $parent_slug,
-		 $page_title,                  
-		 $menu_title,                   
-		 $capability,                   
-		 $menu_slug,                   
-		 $function,                                 
-		 $position 
-	); 
-	add_action( 'admin_init', 'BEECH_notifications_init' ); 
+/**
+ * The core plugin class that is used to define internationalization,
+ * admin-specific hooks, and public-facing site hooks.
+ */
+require plugin_dir_path( __FILE__ ) . 'includes/class-beech_notifications.php';
+
+/**
+ * Require the updater because we want it to update from GitHub
+ */
+require plugin_dir_path( __FILE__ ) . 'includes/class-beech_notifications-updater.php';
+
+
+/**
+ * Begins execution of the plugin.
+ *
+ * Since everything within the plugin is registered via hooks,
+ * then kicking off the plugin from this point in the file does
+ * not affect the page life cycle.
+ *
+ * @since    1.0.0
+ */
+function run_beech_notifications() {
+	$plugin = new Beech_notifications();
+	$plugin->run();
+
+	$updater = new Beech_notifications_updater(__FILE__);
+	$updater->set_username( 'BeechAgency' );
+	$updater->set_repository( 'beech_notifications' );
 }
-
-add_action( 'admin_menu', 'BEECH_notifications_admin_menu' );  
-
-
-require_once('components/beech_notifications-admin-page.php');
-require_once('components/beech_notifications-side-notification.php');
-/*
-require 'components/beech_login-login-page.php';
-require 'components/beech_login-messages.php';
-*/
+run_beech_notifications();

@@ -35,15 +35,23 @@
 .BEECH_notifications--side-bar_content {
     padding: 1rem;
     position: relative;
+    display: flex;
+    gap: 1rem;
 }
 .BEECH_notifications--side-bar_content h5 {
     margin-top: 0;
     margin-bottom: 0.75rem;
     line-height: 1;
+    padding-right: 1.5rem;
 }
 .BEECH_notifications--side-bar_content p {
     margin: 0;
 }
+.BEECH_notifications--side-bar_image {
+    max-width: 5rem;
+    border-radius: 0.25rem;
+}
+
 
 /* Animations */
 .BEECH_notifications--side-bar {
