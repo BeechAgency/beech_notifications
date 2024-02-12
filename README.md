@@ -1,4 +1,5 @@
-=== Beech Notifications ===
+# Beech Notifications
+
 Contributors: (this should be a list of wordpress.org userid's)
 Donate link: https://https://github.com/beechagency/
 Tags: wordpress, notifications, no ads
@@ -10,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Add popups and notifications to your site using the WYSIWYG editor. It is simple and stripped back and ad free. Updates are relased through the repo here on GitHub.
 
-== Description ==
+## Description
 
 Create different kinds of notifications on your site. Banners, top bars, toasts, sticky things on the right. You name it. More will be added in time.
 
@@ -18,7 +19,7 @@ Popup plugins typically kinda suck. They are either hella complicated, or just a
 
 It's simple to keep things simple. 
 
-== Installation ==
+## Installation
 
 This section describes how to install the plugin and get it working.
 
@@ -26,23 +27,27 @@ This section describes how to install the plugin and get it working.
 2. Configure the settings and it should just work
 3. Dial in the CSS using the settings to make it better match your theme.
 
-== Frequently Asked Questions ==
+## Frequently Asked Questions
 
-= Will you provide support? =
+### Will you provide support?
 
 No. This is as is and used for our purposes. It should work but we can't help troubleshoot it. Maybe log a bug in the issues thing and we'll try and resolve it.
 
 
-== Changelog ==
+## Changelog 
 
-= 0.1 =
-* Proof of concept release
+### 1.1 
+* Fixed a bug in the updater
+* Added a plugin icon and banner
 
-= 1.0 =
+### 1.0
 * Rebuilt the entire plugin based on a Class structure
 * Notifications are now created and managed using Notifications under the Tools menu.
 
-== Roadmap ==
+### 0.1
+* Proof of concept release
+
+## Roadmap
 
 There are a lot of ideas for this and it could be made into something really great. Here are a couple that are in the pipes
 
