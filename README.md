@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Add popups and notifications to your site using the WYSIWYG editor. It is simple and stripped back and ad free. Updates are relased through the repo here on GitHub.
 
-## Description
+## Description 
 
 Create different kinds of notifications on your site. Banners, top bars, toasts, sticky things on the right. You name it. More will be added in time.
 
