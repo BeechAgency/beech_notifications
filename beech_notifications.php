@@ -23,6 +23,8 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       beech_notifications
  * Domain Path:       /languages
+ * Icon: 			  assets/icon.png
+ * Banner: 			  assets/banner.png
  */
 
 // If this file is called directly, abort.
