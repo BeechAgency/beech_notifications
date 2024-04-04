@@ -51,6 +51,7 @@ class Beech_notifications_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->settings = $this->get_settings();
 
 	}
 
@@ -201,13 +202,59 @@ class Beech_notifications_Public {
 	}
 
 	/**
+	 * Get the settings values
+	 */
+	private function get_settings() {
+
+		$settings = array();
+
+		$settings['is_disabled'] =  get_option( 'BEECH_notifications--SETTING__disabled' );
+		$settings['is_testmode'] =  get_option('BEECH_notifications--SETTING__testing-mode' );
+		$settings['color-text'] =  get_option('BEECH_notifications--SETTING__color-text' );
+		$settings['color-background'] =  get_option('BEECH_notifications--SETTING__color-background' );
+		$settings['color-accent'] =  get_option('BEECH_notifications--SETTING__color-accent' );
+		$settings['display-width'] =  get_option('BEECH_notifications--SETTING__display-width' );
+
+		return $settings;
+	}
+
+	/**
+	 * Generate CSS styles string
+	 */
+	private function make_css_from_settings() {
+		$css = '.BEECH_notifications {';
+
+		!empty($this->settings['color-text']) ? $css .= '--bch-sn--color: '. $this->settings['color-text'] .';' : ''; 
+		!empty($this->settings['color-accent']) ? $css .= '--bch-sn--accent: '. $this->settings['color-accent']  .';': ''; 
+		!empty($this->settings['color-background']) ? $css .= '--bch-sn--background: '. $this->settings['color-background']  .';': ''; 
+		!empty($this->settings['display-width']) ? $css .= '--bch-sn--width: '. $this->settings['display-width'] .';' : ''; 
+
+		$css .= '};';
+
+		return $css;
+	}
+
+	/**
 	 * Output the JSON to the frontend
 	 */
 	 public function output_active_notifications() {
 		$notifications = $this->get_active_notifications();
 		$notifications_json = wp_json_encode( $notifications  );
 
-		if(count($notifications) > 0) {
+		$not_testmode = true;
+
+		if($this->settings['is_testmode']) {
+			$not_testmode = false;
+			$user_logged_in = is_user_logged_in();
+
+			if($user_logged_in) $not_testmode = true;
+		}
+
+
+		if(count($notifications) > 0 && !$this->settings['is_disabled'] && $not_testmode) {
+			echo '<style type="text/css">';
+			echo $this->make_css_from_settings();
+			echo '</style>';
 			echo '<script type="text/javascript">';
 			echo "const BEECH_notifications_data = $notifications_json";
 			echo '</script>';

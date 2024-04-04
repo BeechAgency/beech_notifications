@@ -117,7 +117,7 @@ class Beech_notifications_updater {
                     'rating'						=> '100.0',
                     'num_ratings'				=> '5',
                     'downloaded'				=> '5',
-                    'added'							=> '2023-07-08',
+                    'added'							=> '2024-03-01',
                     'version'			=> $this->github_response['tag_name'],
                     'author'			=> $this->plugin["AuthorName"],
                     'author_profile'	=> $this->plugin["AuthorURI"],

@@ -163,6 +163,7 @@ class Beech_notifications {
 		$this->loader->add_action('add_meta_boxes', $plugin_admin, 'add_notification_meta_boxes');
 		$this->loader->add_action('save_post', $plugin_admin, 'save_notification_meta_box');
 
+		$this->loader->add_action( 'admin_init', $plugin_admin, 'register_settings');
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_notifications_menu' );
 
 		$this->loader->add_filter( 'manage_beech_notification_posts_columns', $plugin_admin, 'add_notification_columns' );

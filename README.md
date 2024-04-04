@@ -1,6 +1,6 @@
 # Beech Notifications
 
-Contributors: (this should be a list of wordpress.org userid's)
+Contributors: @joshwayman
 Donate link: https://https://github.com/beechagency/
 Tags: wordpress, notifications, no ads
 Requires at least: 6.3.1

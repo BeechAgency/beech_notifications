@@ -51,6 +51,7 @@ class Beech_notifications_Admin {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->settings = $this->set_settings();
 
 	}
 
@@ -335,6 +336,7 @@ class Beech_notifications_Admin {
 
 		// Output fields
 		?>
+		
 		<label for="enabled" class="BN__checkbox">
 			<input type="checkbox" name="enabled" id="enabled" <?php checked($enabled, 'on'); ?> />
 			<span>Enable Notification</span>
@@ -370,6 +372,93 @@ class Beech_notifications_Admin {
 			<span>Pages:</span>
 			<textarea name="pages" id="pages" rows="6"><?php echo esc_textarea($pages); ?></textarea>
 		</label>
+
 		<?php
+	}
+
+	public function set_settings() {
+		return array(
+			array(
+				'title' => 'Disable All Notifications',
+				'key' => 'BEECH_notifications--SETTING__disabled',
+				'description' => 'Turn off all notifications immediately. Hard stop on everything.',
+				'default' => 0,
+				'type' => 'boolean',
+				'group' => 'Config'
+			),
+			array(
+				'title' => 'Testing Mode',
+				'key' => 'BEECH_notifications--SETTING__testing-mode',
+				'description' => 'Only display notifications for logged in users.',
+				'default' => 0,
+				'type' => 'boolean',
+				'group' => 'Config'
+			),
+			array(
+				'title' => 'Notification Text Color',
+				'key' => 'BEECH_notifications--SETTING__color-text',
+				'description' => 'Primary text color',
+				'default' => '#000000',
+				'type' => 'color',
+				'group' => 'Display'
+			),
+			array(
+				'title' => 'Notification Background Color',
+				'key' => 'BEECH_notifications--SETTING__color-background',
+				'description' => 'Primary background color',
+				'default' => '#ffffff',
+				'type' => 'color',
+				'group' => 'Display'
+			),
+			array(
+				'title' => 'Notification Accent Color',
+				'key' => 'BEECH_notifications--SETTING__color-accent',
+				'description' => 'Color of the accents, different for each notification type.',
+				'default' => '#EDF060',
+				'type' => 'color',
+				'group' => 'Display'
+			),
+			array(
+				'title' => 'Default width',
+				'key' => 'BEECH_notifications--SETTING__display-width',
+				'description' => 'Default width for notifications that are not 100% wide.',
+				'default' => '20rem',
+				'type' => 'text',
+				'group' => 'Display'
+			)
+		);
+	}
+
+	public function get_settings() {
+		return $this->settings;
+	}
+
+	/**
+	 * Setup the settings
+	 */
+	public function register_settings() {
+		
+		foreach($this->settings as $setting) {
+			register_setting( 
+				'beech_notifications_settings', 
+				$setting['key'], 
+				array(
+					'default' => $setting['default'],
+					'description' => $setting['description'],
+					'type' => $setting['type']
+				) 
+			);
+		}
+		
+	}
+
+
+
+
+	/**
+	 * Register admin page
+	 */
+	public function register_admin_display() {
+		include_once 'partials/beech_notifications-admin-display.php';
 	}
 }
