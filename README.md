@@ -42,10 +42,10 @@ Hmm, that is a problem. CSS will be required to fix it. Ensure the plugin CSS is
 
 Everything is based on the `.BEECH_notifications` selector. All notifications are placed within the primary notifications container and then placed with CSS accordingly. The titles are always `.BEECH_notifications h5` and the body text is `.BEECH_notifications p`. Note `.BEECH_notification` (singular) will also work, but stick to the plural version. The specific notification selectors are as follows:
 
-- Right corner - `.BEECH_notifications .BEECH_notifications--right_corner`
-- Top Bar - `.BEECH_notifications .BEECH_notifications--top_bar`
-- Toast (Bottom bar) - `.BEECH_notifications .BEECH_notifications--toast`
-- Popup - `.BEECH_notifications .BEECH_notifications--popup_dialog`
+- *Right corner* - `.BEECH_notifications .BEECH_notifications--right_corner`
+- *Top Bar* - `.BEECH_notifications .BEECH_notifications--top_bar`
+- *Toast (Bottom bar)* - `.BEECH_notifications .BEECH_notifications--toast`
+- *Popup* - `.BEECH_notifications .BEECH_notifications--popup_dialog`
 
 
 ## Changelog 
