@@ -69,4 +69,4 @@ Everything is based on the `.BEECH_notifications` selector. All notifications ar
 
 ## Roadmap
 
-Moved to the roadmap page. Go there and check it out.
+Moved to the roadmap page. [Go there and check it out.](https://github.com/BeechAgency/beech_notifications/blob/main/docs/ROADMAP.md)
