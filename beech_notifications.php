@@ -9,14 +9,14 @@
  * that starts the plugin.
  *
  * @link              https://https://github.com/beechagency/
- * @since             1.1
+ * @since             1.2
  * @package           Beech_notifications
  *
  * @wordpress-plugin
  * Plugin Name:       BEECH Notifications
  * Plugin URI:        https://beech.agency
  * Description:       Make some notifications on your site without ads, boat and junk that typically comes with popup and notification plugins.
- * Version:           1.1
+ * Version:           1.2
  * Author:            BEECH Agency
  * Author URI:        https://https://github.com/beechagency//
  * License:           GPL-2.0+
