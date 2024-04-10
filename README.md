@@ -1,7 +1,6 @@
 # Beech Notifications
 
 - Contributors: @joshwayman
-- Donate link: https://https://github.com/beechagency/
 - Tags: wordpress, notifications, no ads
 - Requires at least: 6.3.1
 - Tested up to: 6.4.4
