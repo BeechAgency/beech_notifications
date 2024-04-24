@@ -9,6 +9,8 @@ There are a lot of ideas for this and it could be made into something really gre
 - Configure more design elements through the settings
 - Settings based on specific notificiation type (i.e. position of the right corner, it could be top or left!)
 - Make notifications work without end date.
+- Give notifications a start date
+- Give notifications a cookie setting (how long before it comes back?)
 
 ## Medium priority
 
