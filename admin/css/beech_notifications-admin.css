@@ -7,7 +7,7 @@
     display: flex;
     gap: 10px;
 }
-.BN__input span { width: 6rem; }
+.BN__input span { max-width: 4rem; width: 100%; }
 .BN__input > * { width: 100%; }
 
 .BN__checkbox {
@@ -158,4 +158,70 @@ th span.light {
     font-weight: 300;
     margin-top: 10px;
     font-size: 0.9em;
+}
+
+/* Tags input */
+.BN__input.BN__tags-input {}
+.BN__tags-display {
+    display: flex; 
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.BN__tag {
+    display: inline-flex;
+    gap: 0.5rem;
+    border: solid 1px #DFDFDF;
+    border-radius: 6px;
+    padding: 3px 6px;
+    color: currentColor;
+    background-color: #DFDFDF;
+}
+
+.BN__tag > button {
+    border: solid 0px transparent;
+    background-color: transparent;
+    color: currentColor;
+    cursor:  pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+    padding: 0px;
+    rotate: 45deg;
+}
+.BN__tag:has( button:hover ) {
+    background-color:#b32d2e;
+    color: white;
+}
+.BN__tags-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.BN__tags-input {
+    color: currentColor;
+}
+.BN__hint-text {
+    font-size: 80%;
+    max-width: 100% !important;
+    margin-bottom: 10px;
+}
+.BN__tags-hidden-input { display: none;}
+
+.BN__tags-input-el {
+    display: flex;
+    flex-wrap: nowrap;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+}
+.BN__tags-input-el input {
+    border: solid 0px transparent;
+    outline-color: transparent;
+    width: 100%;
+    border-radius: 4px 0 0 4px;
+}
+.BN__tags-input-el button {
+    border: solid 0px transparent;
+    font-weight: normal;
+    font-size: 1.1rem;
+    cursor: pointer;
 }

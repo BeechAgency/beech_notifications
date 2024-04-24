@@ -115,3 +115,93 @@ function openTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 }
+
+
+/**
+ * Handle tag inputs
+ */
+jQuery(document).ready(function ($) { 
+
+  const tagInputs = document.querySelectorAll(".BN__tags-input-container");
+
+  if(!tagInputs) return false;
+
+  function handleTag( template, text, output ) {
+    const clone = template.content.cloneNode(true);
+
+    //clone.textContent = text;
+    clone.querySelector("span").textContent = text;
+
+    clone.querySelector("button").addEventListener("click", removeTag);
+
+    output.appendChild(clone);
+  }
+
+
+  function updateHiddenInput( group ) {
+    const realInput = group.querySelector("textarea");
+    const outputArea = group.querySelector(".BN__tags-display");
+
+    const tagsText = outputArea.querySelectorAll('.BN__tag span');
+
+    const tags = [];
+
+    tagsText.forEach( tag => {
+      tags.push(tag.textContent.trim());
+    })
+
+    const tagsString = tags.join(',')
+
+    realInput.innerHTML = tagsString;
+  }
+
+  function createInitialTags( hiddenInput, template, output) {
+    const tagString = hiddenInput.value;
+
+    const tagArray = tagString.split(',');
+
+    tagArray.forEach( tagText => {
+      handleTag(template, tagText, output);
+    })
+  }
+
+  function removeTag(e) {
+    e.preventDefault();
+
+    const el = e.currentTarget;
+    const group = el.parentElement.parentElement.parentElement.parentElement;
+
+    el.parentElement.remove();
+    updateHiddenInput(group);
+
+  }
+
+  tagInputs.forEach( group => {
+
+    const input = group.querySelector('input');
+    const addButton = group.querySelector("input + button");
+    const tagTemplate = group.querySelector("template");
+    const realInput = group.querySelector('textarea');
+
+    const outputArea = group.querySelector('.BN__tags-display');
+
+    createInitialTags(realInput, tagTemplate, outputArea);
+
+
+    addButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        // Get the text entered by the user
+        const text = input.value.trim();
+
+        // Clear the input field
+        input.value = "";
+        handleTag(tagTemplate, text, outputArea);
+
+        updateHiddenInput(group);
+        // Move the entered text to the output element
+        //outputArea.textContent = outputArea.textContent + text;
+    });
+
+  })
+
+});

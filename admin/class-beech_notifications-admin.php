@@ -52,6 +52,7 @@ class Beech_notifications_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->settings = $this->set_settings();
+		$this->namespace = 'BEECH_notifications--';
 
 	}
 
@@ -312,24 +313,24 @@ class Beech_notifications_Admin {
 		}
 
 		// Save custom field values
-		update_post_meta($post_id, '_enabled', isset($_POST['enabled']) ? 'on' : 'off');
-		update_post_meta($post_id, '_end_date', sanitize_text_field($_POST['end_date']));
-		update_post_meta($post_id, '_type', sanitize_text_field($_POST['type']));
-		update_post_meta($post_id, '_pages', sanitize_textarea_field($_POST['pages']));
-		update_post_meta($post_id, '_cta_text', sanitize_text_field($_POST['cta_text']));
-		update_post_meta($post_id, '_cta_link', sanitize_text_field($_POST['cta_link']));
+		update_post_meta($post_id, $this->namespace.'_enabled', isset($_POST['enabled']) ? 'on' : 'off');
+		update_post_meta($post_id, $this->namespace.'_end_date', sanitize_text_field($_POST['end_date']));
+		update_post_meta($post_id, $this->namespace.'_type', sanitize_text_field($_POST['type']));
+		update_post_meta($post_id, $this->namespace.'_pages', sanitize_textarea_field($_POST['pages']));
+		update_post_meta($post_id, $this->namespace.'_cta_text', sanitize_text_field($_POST['cta_text']));
+		update_post_meta($post_id, $this->namespace.'_cta_link', sanitize_text_field($_POST['cta_link']));
 	}
 
 
 	// Render callback for the notification meta box
 	public function render_notification_meta_box($post) {
 		// Retrieve existing values from the database
-		$enabled = get_post_meta($post->ID, '_enabled', true);
-		$cta_text = get_post_meta($post->ID, '_cta_text', true);
-		$cta_link = get_post_meta($post->ID, '_cta_link', true);
-		$end_date = get_post_meta($post->ID, '_end_date', true);
-		$type = get_post_meta($post->ID, '_type', true);
-		$pages = get_post_meta($post->ID, '_pages', true);
+		$enabled = get_post_meta($post->ID, $this->namespace.'_enabled', true);
+		$cta_text = get_post_meta($post->ID, $this->namespace.'_cta_text', true);
+		$cta_link = get_post_meta($post->ID, $this->namespace.'_cta_link', true);
+		$end_date = get_post_meta($post->ID, $this->namespace.'_end_date', true);
+		$type = get_post_meta($post->ID, $this->namespace.'_type', true);
+		$pages = get_post_meta($post->ID, $this->namespace.'_pages', true);
 
 		// Nonce field to verify the submission
 		wp_nonce_field('notification_meta_box_nonce', 'notification_nonce');
@@ -344,12 +345,12 @@ class Beech_notifications_Admin {
 		<br>
 		<label for="cta_text" class="BN__input">
 			<span>CTA Text</span>
-			<input type="text" name="cta_text" id="cta_text" <?php checked($cta_text, 'on'); ?> />
+			<input type="text" name="cta_text" id="cta_text" value="<?php echo $cta_text; ?>" />
 		</label>
 		<br>
 		<label for="cta_link" class="BN__input">
 			<span>CTA Link</span>
-			<input type="text" name="cta_link" id="cta_link" <?php checked($cta_link, 'on'); ?> />
+			<input type="text" name="cta_link" id="cta_link" value="<?php echo $cta_link; ?>" />
 		</label>
 		<br>
 		<label for="end_date" class="BN__input">
@@ -368,10 +369,23 @@ class Beech_notifications_Admin {
 			</select>
 		</label>
 		<br>
-		<label for="pages" class="BN__input">
+		<label for="pages" class="BN__input BN__tags-input-container" >
 			<span>Pages:</span>
-			<textarea name="pages" id="pages" rows="6"><?php echo esc_textarea($pages); ?></textarea>
+
+			<div class="BN__tags-input-group">
+				<div class="BN__tags-input-el">
+					<input class="BN__tags-input" placeholder="/page-slug" type="text">
+					<button>+</button>
+				</div>
+				<span class="BN__hint-text">Press the plus to add page to list</span>
+				<div class="BN__tags-display"></div>
+			</div>
+			<template class='BN__tag_template'>
+				<div class="BN__tag"><span>Tag</span> <button class="BN__tag-close">+</button></div>
+			</template>
+			<textarea class="BN__tags-hidden-input" name="pages" id="pages" rows="1"><?php echo esc_textarea($pages); ?></textarea>
 		</label>
+		
 
 		<?php
 	}
@@ -424,6 +438,14 @@ class Beech_notifications_Admin {
 				'description' => 'Default width for notifications that are not 100% wide.',
 				'default' => '20rem',
 				'type' => 'text',
+				'group' => 'Display'
+			),
+			array(
+				'title' => 'Custom CSS',
+				'key' => 'BEECH_notifications--SETTING__custom-css',
+				'description' => 'Add your custom styles here!',
+				'default' => '',
+				'type' => 'textarea',
 				'group' => 'Display'
 			)
 		);

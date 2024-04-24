@@ -52,6 +52,7 @@ class Beech_notifications_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->settings = $this->get_settings();
+		$this->namespace = 'BEECH_notifications--';
 
 	}
 
@@ -127,7 +128,8 @@ class Beech_notifications_Public {
 		$notifications = array();
 		$cookie_array = array();
 
-		$current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		$parsedCurrentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		$current_path = $parsedCurrentPath === '/' ? $parsedCurrentPath : trim($parsedCurrentPath, '/');
 
 
 		if (isset($_COOKIE['BEECH_notifications'])) {
@@ -143,7 +145,7 @@ class Beech_notifications_Public {
 				$notification_query->the_post();
 
 				$ID = get_the_ID();
-				$end_date = get_post_meta( get_the_ID(), '_end_date', true );
+				$end_date = get_post_meta( get_the_ID(), $this->namespace.'_end_date', true );
 
 				// Create a DateTime object from the date string
 				$end_date_time = new DateTime($end_date);
@@ -156,21 +158,31 @@ class Beech_notifications_Public {
 					 !in_array($ID, $cookie_array) 
 					) { 
 
-					$pages = get_post_meta( get_the_ID(), '_pages', true );
+					$pages = get_post_meta( get_the_ID(), $this->namespace.'_pages', true );
 					$pages = str_replace("\r", "", $pages); // Clean up the carriage returns.
+					
+					if (strpos($pages, ",") !== false) {
+						$pagesArrayRaw = explode(",",$pages);
 
-					if (strpos($pages, "\n") !== false) {
-						$pagesArray = explode("\n",$pages);
+						// Trim leading and trailing slashes from each element in the array
+						$pagesArray = array_map(function($path) {
+							// Skip trimming if it's the root path '/'
+							if ($path === '/') {
+								return $path;
+							} else {
+								return trim($path, '/');
+							}
+						}, $pagesArrayRaw);
+
+
+
 					} else {
 						$pagesArray = array();
 					}
 
 					//$notifications[] = $pagesArray;
 
-					if( 
-						in_array($current_path, $pagesArray) || 
-						count($pagesArray) === 0 
-						) {
+					if( in_array($current_path, $pagesArray ) || count($pagesArray) === 0 ) {
  
 						// The end date is in the future!!!
 						$notification = array(
@@ -179,14 +191,22 @@ class Beech_notifications_Public {
 							'content' => apply_filters('the_content', get_the_content()),
 							'image' => get_the_post_thumbnail_url(),
 							'end_date' => $end_date,
-							'type' => get_post_meta( get_the_ID(), '_type', true ),
+							'type' => get_post_meta( get_the_ID(), $this->namespace.'_type', true ),
+							'current' => $current_path,
 							'pages' => $pagesArray,
-							'cta_text' => get_post_meta( get_the_ID(), '_cta_text', true ),
-							'cta_link' => get_post_meta( get_the_ID(), '_cta_link', true ),
+							'cta_text' => get_post_meta( get_the_ID(), $this->namespace.'_cta_text', true ),
+							'cta_link' => get_post_meta( get_the_ID(), $this->namespace.'_cta_link', true ),
 						);
 
 						$notifications[] = $notification;
-
+					} else {
+						/*
+						$notifications[] = $notification = array(
+							'ID' => $ID,
+							'current' => $current_path,
+							'pages' => $pagesArray,
+						);
+						*/
 					}
 				}
 				
@@ -214,6 +234,7 @@ class Beech_notifications_Public {
 		$settings['color-background'] =  get_option('BEECH_notifications--SETTING__color-background' );
 		$settings['color-accent'] =  get_option('BEECH_notifications--SETTING__color-accent' );
 		$settings['display-width'] =  get_option('BEECH_notifications--SETTING__display-width' );
+		$settings['custom-css'] =  get_option('BEECH_notifications--SETTING__custom-css' );
 
 		return $settings;
 	}
@@ -254,6 +275,9 @@ class Beech_notifications_Public {
 		if(count($notifications) > 0 && !$this->settings['is_disabled'] && $not_testmode) {
 			echo '<style type="text/css">';
 			echo $this->make_css_from_settings();
+			echo '</style>';
+			echo '<style type="text/css">';
+			echo $this->settings['custom-css'];
 			echo '</style>';
 			echo '<script type="text/javascript">';
 			echo "const BEECH_notifications_data = $notifications_json";
