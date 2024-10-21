@@ -8,6 +8,8 @@
 .BEECH_notifications--link { text-decoration: none; color: inherit;}
 
 .BEECH_notifications--content > :last-child { margin-bottom: 0;}
+.BEECH_notifications--content form:has(+ p),
+.BEECH_notifications--content p + div form { margin-top: 1.5rem; }
 
 /* Sidebar Notification */
 .BEECH_notifications--right-wrapper {

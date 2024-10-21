@@ -205,3 +205,10 @@ jQuery(document).ready(function ($) {
   })
 
 });
+
+jQuery(document).ready(function ($) {
+  // Trigger the Add Form button for Gravity Forms if TinyMCE is active
+  if (typeof gform_add_form_button !== "undefined") {
+    gform_add_form_button();
+  }
+});

@@ -233,15 +233,15 @@ class Beech_notifications_Admin {
 	public function add_notification_column_data ( $column, $post_id ) {
 		switch ( $column ) {
 			case 'enabled':
-				echo ucfirst(get_post_meta($post_id, '_enabled', true));
+				echo ucfirst(get_post_meta($post_id, $this->namespace.'_enabled', true));
 				break;
 			case 'type':
-				echo ucfirst(get_post_meta($post_id, '_type', true));
+				echo ucfirst(get_post_meta($post_id, $this->namespace.'_type', true));
 				break;
 			case 'end_date':
 				$dateFormat = get_option('date_format');
 				$timeFormat = get_option('time_format');
-				$dateString = get_post_meta($post_id, '_end_date', true);
+				$dateString = get_post_meta($post_id, $this->namespace.'_end_date', true);
 				$formattedDate = date_i18n($dateFormat.' '.$timeFormat, strtotime($dateString));
 
 				echo $formattedDate;
@@ -474,13 +474,37 @@ class Beech_notifications_Admin {
 		
 	}
 
-
-
-
 	/**
 	 * Register admin page
 	 */
 	public function register_admin_display() {
 		include_once 'partials/beech_notifications-admin-display.php';
+	}
+
+
+
+	/**
+	 * Set GForm button for Notificaion WYSIWYG pages
+	 * @since 1.3
+	 * 
+	 */
+	public function display_gform_button(  $display_add_form_button  ) {
+		global $current_screen;
+
+
+		if(!empty($current_screen) && $current_screen->post_type == 'beech_notification') {
+
+			/*
+			echo '<pre style="position:fixed; background-color:red; z-index: 100000; left: 0; top: 0;" id="pre">';
+			var_dump($current_screen->post_type);
+			var_dump('YOLO');
+			echo '</pre>';
+			*/
+
+			return true;
+		} else {
+			return $display_add_form_button;
+		}
+
 	}
 }

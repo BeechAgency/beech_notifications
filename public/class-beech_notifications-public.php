@@ -110,17 +110,18 @@ class Beech_notifications_Public {
 		$args = array(
 			'post_type'      => 'beech_notification', // Replace with your custom post type slug
 			'post_status'    => 'publish',
+			
 			'meta_query'     => array(
 				array(
-					'key'   => '_enabled',
+					'key'   => $this->namespace.'_enabled',
 					'value' => 'on', // Assuming 'on' is the value for enabled
 				),
 				/*
 				array(
-					'key'   => '_end_date',
+					'key'   => $this->namespace.'_end_date',
 					'value' => 'on', // Assuming 'on' is the value for enabled
 				),*/
-			),
+			), 
 		);
 
 		$notification_query = new WP_Query($args);
@@ -131,6 +132,11 @@ class Beech_notifications_Public {
 		$parsedCurrentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 		$current_path = $parsedCurrentPath === '/' ? $parsedCurrentPath : trim($parsedCurrentPath, '/');
 
+		/*
+		echo '<pre>';
+		var_dump(isset($_COOKIE['BEECH_notifications']));
+		echo '</pre>';
+		*/
 
 		if (isset($_COOKIE['BEECH_notifications'])) {
 			$cookie_value =  $_COOKIE['BEECH_notifications'];
