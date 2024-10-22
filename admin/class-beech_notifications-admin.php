@@ -319,6 +319,9 @@ class Beech_notifications_Admin {
 		update_post_meta($post_id, $this->namespace.'_pages', sanitize_textarea_field($_POST['pages']));
 		update_post_meta($post_id, $this->namespace.'_cta_text', sanitize_text_field($_POST['cta_text']));
 		update_post_meta($post_id, $this->namespace.'_cta_link', sanitize_text_field($_POST['cta_link']));
+
+		update_post_meta($post_id, $this->namespace.'_hide_title', isset($_POST['hide_title']) ? 'on' : 'off');
+		update_post_meta($post_id, $this->namespace.'_hide_image', isset($_POST['hide_image']) ? 'on' : 'off');
 	}
 
 
@@ -331,6 +334,10 @@ class Beech_notifications_Admin {
 		$end_date = get_post_meta($post->ID, $this->namespace.'_end_date', true);
 		$type = get_post_meta($post->ID, $this->namespace.'_type', true);
 		$pages = get_post_meta($post->ID, $this->namespace.'_pages', true);
+
+
+		$hide_title = get_post_meta($post->ID, $this->namespace.'_hide_title', true);
+		$hide_image = get_post_meta($post->ID, $this->namespace.'_hide_image', true);
 
 		// Nonce field to verify the submission
 		wp_nonce_field('notification_meta_box_nonce', 'notification_nonce');
@@ -385,7 +392,17 @@ class Beech_notifications_Admin {
 			</template>
 			<textarea class="BN__tags-hidden-input" name="pages" id="pages" rows="1"><?php echo esc_textarea($pages); ?></textarea>
 		</label>
-		
+		<br />
+
+		<label for="hide_title" class="BN__checkbox BN--small">
+			<input type="checkbox" name="hide_title" id="hide_title" <?php checked($hide_title, 'on'); ?> />
+			<span>Hide Title</span>
+		</label>
+		<br />
+		<label for="hide_image" class="BN__checkbox BN--small">
+			<input type="checkbox" name="hide_image" id="hide_image" <?php checked($hide_image, 'on'); ?> />
+			<span>Hide Image</span>
+		</label>
 
 		<?php
 	}
@@ -447,6 +464,49 @@ class Beech_notifications_Admin {
 				'default' => '',
 				'type' => 'textarea',
 				'group' => 'Display'
+			),
+
+
+			array(
+				'title' => 'Button Border Radius',
+				'key' => 'BEECH_notifications--SETTING__btn--border-radius',
+				'description' => 'Border radius for buttons.',
+				'default' => '3rem',
+				'type' => 'text',
+				'group' => 'Buttons'
+			),
+			array(
+				'title' => 'Button Padding',
+				'key' => 'BEECH_notifications--SETTING__btn--padding',
+				'description' => 'CSS value for padding for buttons.',
+				'default' => '0.5rem 1rem',
+				'type' => 'text',
+				'group' => 'Buttons'
+			),
+
+			array(
+				'title' => 'Button Text Color',
+				'key' => 'BEECH_notifications--SETTING__btn--color',
+				'description' => 'Color of the text on buttons. Defaults to the notification text color.',
+				'default' => null,
+				'type' => 'color',
+				'group' => 'Buttons'
+			),
+			array(
+				'title' => 'Button Background Color',
+				'key' => 'BEECH_notifications--SETTING__btn--background-color',
+				'description' => 'Color of the background of buttons. Defaults to notification accent color.',
+				'default' => null,
+				'type' => 'color',
+				'group' => 'Buttons'
+			),
+			array(
+				'title' => 'Button Text Size',
+				'key' => 'BEECH_notifications--SETTING__font-size',
+				'description' => 'Font size for buttons.',
+				'default' => 'inherit',
+				'type' => 'text',
+				'group' => 'Buttons'
 			)
 		);
 	}

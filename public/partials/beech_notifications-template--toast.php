@@ -18,7 +18,7 @@
         data-beech-notification-type="toast"
         >
         <div class="BEECH_notifications--toast_content">
-            <a href="#" class="BEECH_notifications--link"><img src="" class="BEECH_notifications--image BEECH_notifications--toast_image" /></a>
+            <a href="#" class="BEECH_notifications--link BEECH_notifications--image-link"><img src="" class="BEECH_notifications--image BEECH_notifications--toast_image" /></a>
             <div class="BEECH_notifications--toast_content--inner">
                 <a href="#" class="BEECH_notifications--link">
                     <h5 class="BEECH_notifications--title"></h5>

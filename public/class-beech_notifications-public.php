@@ -132,20 +132,17 @@ class Beech_notifications_Public {
 		$parsedCurrentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 		$current_path = $parsedCurrentPath === '/' ? $parsedCurrentPath : trim($parsedCurrentPath, '/');
 
-		/*
-		echo '<pre>';
-		var_dump(isset($_COOKIE['BEECH_notifications']));
-		echo '</pre>';
-		*/
 
 		if (isset($_COOKIE['BEECH_notifications'])) {
 			$cookie_value =  $_COOKIE['BEECH_notifications'];
 			$cookie_value =  rtrim($cookie_value, ',');
 
 			$cookie_array =  explode(',', $cookie_value);
-			//$notifications[] = $cookie_array;
 		}
 
+		/**
+		 * Loop through the notifications
+		 */
 		if ($notification_query->have_posts()) {
 			while ($notification_query->have_posts()) {
 				$notification_query->the_post();
@@ -159,68 +156,75 @@ class Beech_notifications_Public {
 				// Get the current date and time
 				$current_date_time = new DateTime();
 
-				if (
-					($end_date_time > $current_date_time) &&
-					 !in_array($ID, $cookie_array) 
-					) { 
+				
 
-					$pages = get_post_meta( get_the_ID(), $this->namespace.'_pages', true );
-					$pages = str_replace("\r", "", $pages); // Clean up the carriage returns.
-					
-					if (strpos($pages, ",") !== false) {
-						$pagesArrayRaw = explode(",",$pages);
-
-						// Trim leading and trailing slashes from each element in the array
-						$pagesArray = array_map(function($path) {
-							// Skip trimming if it's the root path '/'
-							if ($path === '/') {
-								return $path;
-							} else {
-								return trim($path, '/');
-							}
-						}, $pagesArrayRaw);
+				$no_end_date = empty($end_date);
+				$end_date_is_in_the_future = $end_date_time > $current_date_time;
+				$notification_is_dismissed = in_array($ID, $cookie_array);
 
 
+				// If it is hidden in cookie land keep going
+				if($notification_is_dismissed) continue;
+				if(!$no_end_date && !$end_date_is_in_the_future) continue;
 
-					} else {
-						$pagesArray = array();
-					}
 
-					//$notifications[] = $pagesArray;
+				$pages = get_post_meta( get_the_ID(), $this->namespace.'_pages', true );
+				$pages = str_replace("\r", "", $pages); // Clean up the carriage returns.
 
-					if( in_array($current_path, $pagesArray ) || count($pagesArray) === 0 ) {
- 
-						// The end date is in the future!!!
-						$notification = array(
-							'ID' => $ID,
-							'title' => get_the_title(),
-							'content' => apply_filters('the_content', get_the_content()),
-							'image' => get_the_post_thumbnail_url(),
-							'end_date' => $end_date,
-							'type' => get_post_meta( get_the_ID(), $this->namespace.'_type', true ),
-							'current' => $current_path,
-							'pages' => $pagesArray,
-							'cta_text' => get_post_meta( get_the_ID(), $this->namespace.'_cta_text', true ),
-							'cta_link' => get_post_meta( get_the_ID(), $this->namespace.'_cta_link', true ),
-						);
+				/*
+				echo '<pre style="position:fixed; background-color:black; color: white; z-index: 100000; padding: 1rem; left: 1rem; top: 0; max-width: 34rem; text-wrap: wrap" id="pre">';
+				print_r($pages);
+				var_dump($pages);
+				echo '</pre>';
+				*/
+				
+				if (strpos($pages, ",") !== false) {
+					$pagesArrayRaw = explode(",",$pages);
 
-						$notifications[] = $notification;
-					} else {
-						/*
-						$notifications[] = $notification = array(
-							'ID' => $ID,
-							'current' => $current_path,
-							'pages' => $pagesArray,
-						);
-						*/
-					}
+					// Trim leading and trailing slashes from each element in the array
+					$pagesArray = array_map(function($path) {
+						// Skip trimming if it's the root path '/'
+						if ($path === '/') {
+							return $path;
+						} else {
+							return trim($path, '/');
+						}
+					}, $pagesArrayRaw);
+
+
+
+				} else {
+					$pagesArray = array();
+				}
+
+				//$notifications[] = $pagesArray;
+
+				if( in_array($current_path, $pagesArray ) || count($pagesArray) === 0 ) {
+
+					// The end date is in the future!!!
+					$notification = array(
+						'ID' => $ID,
+						'title' => get_the_title(),
+						'content' => apply_filters('the_content', get_the_content()),
+						'image' => get_the_post_thumbnail_url(),
+						'end_date' => $end_date,
+						'type' => get_post_meta( get_the_ID(), $this->namespace.'_type', true ),
+						'current' => $current_path,
+						'pages' => $pagesArray,
+						'cta_text' => get_post_meta( get_the_ID(), $this->namespace.'_cta_text', true ),
+						'cta_link' => get_post_meta( get_the_ID(), $this->namespace.'_cta_link', true ),
+						'hide_image' => get_post_meta( get_the_ID(), $this->namespace.'_hide_image', true ) === 'on' ? true : false,
+						'hide_title' => get_post_meta( get_the_ID(), $this->namespace.'_hide_title', true ) === 'on' ? true : false
+					);
+
+					$notifications[] = $notification;
 				}
 				
 			}
 
 			// Restore original post data
 			wp_reset_postdata();
-		}
+		} /* End Notification Loop */
 
 		//$notifications_json = wp_json_encode( $notifications  );
 		return $notifications;
@@ -242,6 +246,12 @@ class Beech_notifications_Public {
 		$settings['display-width'] =  get_option('BEECH_notifications--SETTING__display-width' );
 		$settings['custom-css'] =  get_option('BEECH_notifications--SETTING__custom-css' );
 
+		$settings['btn-border-raidus'] =  get_option('BEECH_notifications--SETTING__btn--border-radius' );
+		$settings['btn-padding'] =  get_option('BEECH_notifications--SETTING__btn--padding' );
+		$settings['btn-color'] =  get_option('BEECH_notifications--SETTING__btn--color' );
+		$settings['btn-background-color'] =  get_option('BEECH_notifications--SETTING__btn--background-color' );
+		$settings['btn-font-size'] =  get_option('BEECH_notifications--SETTING__btn--font-size' );
+
 		return $settings;
 	}
 
@@ -255,6 +265,12 @@ class Beech_notifications_Public {
 		!empty($this->settings['color-accent']) ? $css .= '--bch-sn--accent: '. $this->settings['color-accent']  .';': ''; 
 		!empty($this->settings['color-background']) ? $css .= '--bch-sn--background: '. $this->settings['color-background']  .';': ''; 
 		!empty($this->settings['display-width']) ? $css .= '--bch-sn--width: '. $this->settings['display-width'] .';' : ''; 
+
+		!empty($this->settings['btn-border-raidus']) ? $css .= '--bch-sn__btn--border-radius: '. $this->settings['btn-border-raidus'] .';' : ''; 
+		!empty($this->settings['btn-padding']) ? $css .= '--bch-sn__btn--padding: '. $this->settings['btn-padding'] .';' : ''; 
+		!empty($this->settings['btn-color']) ? $css .= '--bch-sn__btn--color: '. $this->settings['btn-color'] .';' : ''; 
+		!empty($this->settings['btn-background-color']) ? $css .= '--bch-sn__btn--background: '. $this->settings['btn-background-color'] .';' : ''; 
+		!empty($this->settings['btn-font-size']) ? $css .= '--bch-sn__btn--size: '. $this->settings['btn-font-size'] .';' : '';
 
 		$css .= '};';
 

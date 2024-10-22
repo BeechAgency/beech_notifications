@@ -70,6 +70,11 @@ console.log("BEECH NOFITICATIONS LOADED v2");
         "[data-beech-notification-id='" + notification.ID + "']"
       );
 
+      console.log('Preparing notification: ', new_notification, notification);
+
+      if(notification.hide_image || !notification.image) new_notification.classList.add('BN--no-image');
+      if(notification.hide_title) new_notification.classList.add('BN--no-title');
+
       //console.log(new_notification);
       const delay = n * 500;
 

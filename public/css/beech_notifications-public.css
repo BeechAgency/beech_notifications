@@ -3,6 +3,12 @@
     --bch-sn--color : black;
     --bch-sn--accent : white;
     --bch-sn--background : white;
+
+    --bch-sn__btn--border-radius : 3rem;
+    --bch-sn__btn--padding : 0.5rem 1rem;
+    --bch-sn__btn--background : var(--bch-sn--accent);
+    --bch-sn__btn--color : var(--bch-sn--color);
+    --bch-sn__btn--size : inherit;
 }
 
 .BEECH_notifications--link { text-decoration: none; color: inherit;}
@@ -37,7 +43,7 @@
     transition: 150ms ease all;
     cursor: pointer;
     text-decoration: none;
-    color: currentColor;
+    /*color: currentColor;*/
 }
 .BEECH_notifications--right_corner a:hover {
     opacity: 0.7;
@@ -47,7 +53,7 @@
 }
 
 .BEECH_notifications--right_corner_content {
-    padding: 1rem;
+    padding: 1rem 3rem 1rem 1rem;
     position: relative;
     display: flex;
     gap: 1rem;
@@ -56,7 +62,6 @@
     margin-top: 0;
     margin-bottom: 0.75rem;
     line-height: 1;
-    padding-right: 1.5rem;
 }
 .BEECH_notifications--right_corner_content p {
     margin: 0;
@@ -133,6 +138,11 @@
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }*/
+
+/** Modifiers **/
+.BEECH_notification.BN--no-image .BEECH_notifications--image,
+.BEECH_notification.BN--no-image .BEECH_notifications--image-link { display: none; }
+.BEECH_notification.BN--no-title .BEECH_notifications--title { display: none; }
 
 @keyframes toastIn {
     0% {
@@ -216,7 +226,7 @@ body:has( .BEECH_notifications--top_bar) {
     margin-top: 0;
 }
 body:has( .BEECH_notifications--top_bar.BEECH__open ) {
-    margin-top: calc(2rem + var(--wp--preset--font-size--large) * 1.2 );
+    margin-top: calc(2rem + var(--wp--preset--font-size--large, 2rem) * 1.2 );
 }
 
 body:has( .BEECH_notifications--top_bar.BEECH__open.BEECH__closing ) {
@@ -256,7 +266,7 @@ button.BEECH_notifications--close {
     background-color: transparent;
 }
 .BEECH_notifications--popup_content .BEECH_notifications--title {
-    font-size:var(--wp--preset--font-size--x-large);
+    font-size:var(--wp--preset--font-size--x-large, 2rem);
 }
 .BEECH_notifications--popup_content--header { margin-bottom: 1.5rem; }
 
@@ -303,4 +313,27 @@ dialog.BEECH_notifications--popup_dialog,
 .BEECH_notifications--close:hover svg path, 
 .BEECH_notifications--close:hover svg circle {
     transition: all 150ms ease;
+}
+
+.BEECH_notifications--button:empty { display: none; }
+.BEECH_notifications--button {
+    display: inline-block;
+    margin-top: 1rem;
+
+    border-radius: var(--bch-sn__btn--border-radius);
+    padding: var(--bch-sn__btn--padding);
+    background-color: var(--bch-sn__btn--background);
+    color: var(--bch-sn__btn--color);
+    font-size: var(--bch-sn__btn--size);
+    border : 1px solid var(--bch-sn__btn--background);
+
+    &:hover {
+        background-color: var(--bch-sn__btn--color);
+        color: var(--bch-sn__btn--background);
+        border-color : var(--bch-sn__btn--background);
+    }
+}
+
+.xdebug-var-dump {
+    text-wrap-mode: wrap;
 }

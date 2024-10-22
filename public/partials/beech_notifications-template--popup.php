@@ -20,7 +20,7 @@
         >
         <dialog class="BEECH_notifications--popup_dialog" id="">
             <div class="BEECH_notifications--popup_content">
-                <a href="#" class="BEECH_notifications--link BEECH_notifications--popup_image-wrapper"><img src="" class="BEECH_notifications--image BEECH_notifications--popup_image" /></a>
+                <a href="#" class="BEECH_notifications--link BEECH_notifications--popup_image-wrapper BEECH_notifications--image-link"><img src="" class="BEECH_notifications--image BEECH_notifications--popup_image" /></a>
 
                 <div class="BEECH_notifications--popup_content--inner">
                     <div class="BEECH_notifications--popup_content--header">
