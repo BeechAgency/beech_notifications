@@ -49,13 +49,28 @@ Everything is based on the `.BEECH_notifications` selector. All notifications ar
 
 ## Changelog 
 
-### 1.2
+### 1.4 - Better out of the box. More Customisations
+* Added configuration for default button styles in the options. Will possibly add this at a notification level if necessary.
+* When adding the plugin to a site no config is required to make it look ok.
+* Added a hide title and hide image setting to the Notification
+* Admin columns populate data correctly now
+* Fixed a host of display logic bugs. Notifications with no End Date will now display
+* Tightend up using gravity forms within the popup notification type.
+
+
+### 1.3 - New pages interface! Custom CSS and more!
+ * Added custom css as an option!
+ * Pages now has a taggy interface for adding things. Will definitely clean up data validation. It is slash agnostic too.
+ * Fixed an issue with the CTA text and link settings on a notification not displaying.
+ * Cleaned up some styles
+
+### 1.2 - We got options!
 * Options are now a thing! Hooray!
 * Global test mode now an option for when you want to test your schnit
 * Global disable notifications is an option
 * Notification colours are now configurable.
 
-### 1.1 
+### 1.1 - Fixes galore
 * Fixed a bug in the updater
 * Added a plugin icon and banner
 
