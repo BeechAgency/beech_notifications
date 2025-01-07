@@ -7,18 +7,11 @@ Version:           1.4
 Requires at least: 6.5
 Requires PHP: 7.2
 Author:            Beech Agency
-Author URI:        https://github.com/beechagency/
-License:           GPL-2.0+
-License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+Author URI:        https://beech.agency
 Text Domain:       beech_notifications
-Domain Path:       /languages
 */
 
-/**
- * @link              https://github.com/beechagency/
- * @since             1.4
- * @package           Beech_notifications
- */
+
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -31,6 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'BEECH_NOTIFICATIONS_VERSION', '1.4' );
+
+/**
+ * @link              https://github.com/beechagency/
+ * @since             1.4
+ * @package           Beech_notifications
+ */
 
 /**
  * The code that runs during plugin activation.
