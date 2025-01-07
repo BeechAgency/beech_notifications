@@ -4,21 +4,25 @@ Plugin Name:       Beech Notifications
 Plugin URI:        https://beech.agency
 Description:       Create notifications on your site without ads, bloat, and junk typically found in popup and notification plugins.
 Version:           1.4
+Requires at least: 6.5
+Requires PHP: 7.2
 Author:            Beech Agency
 Author URI:        https://github.com/beechagency/
 License:           GPL-2.0+
 License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
 Text Domain:       beech_notifications
 Domain Path:       /languages
-
-@link              https://github.com/beechagency/
-@since             1.4
-@package           Beech_notifications
 */
 
+/**
+ * @link              https://github.com/beechagency/
+ * @since             1.4
+ * @package           Beech_notifications
+ */
+
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 
 /**

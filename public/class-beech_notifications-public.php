@@ -206,7 +206,7 @@ class Beech_notifications_Public {
 						'ID' => $ID,
 						'title' => get_the_title(),
 						'content' => apply_filters('the_content', get_the_content()),
-						'image' => get_the_post_thumbnail_url(),
+						'image' => get_the_post_thumbnail_url(null, 'full'),
 						'end_date' => $end_date,
 						'type' => get_post_meta( get_the_ID(), $this->namespace.'_type', true ),
 						'current' => $current_path,
