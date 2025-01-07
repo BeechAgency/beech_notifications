@@ -1,27 +1,20 @@
 <?php
 /*
- * Plugin Name:       Beech Notifications
- * Plugin URI:        https://beech.agency
- * Description:       Make some notifications on your site without ads, boat and junk that typically comes with popup and notification plugins.
- * Version:           1.4
- * Author:            Beech Agency
- * Author URI:        https://https://github.com/beechagency/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       beech_notifications
- * Domain Path:       /languages
- * Icon: 			  assets/icon.png
- * Banner: 			  assets/banner.png
- * 
- *  * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
- * @link              https://https://github.com/beechagency/
- * @since             1.4
- * @package           Beech_notifications
- */
+Plugin Name:       Beech Notifications
+Plugin URI:        https://beech.agency
+Description:       Create notifications on your site without ads, bloat, and junk typically found in popup and notification plugins.
+Version:           1.4
+Author:            Beech Agency
+Author URI:        https://github.com/beechagency/
+License:           GPL-2.0+
+License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+Text Domain:       beech_notifications
+Domain Path:       /languages
+
+@link              https://github.com/beechagency/
+@since             1.4
+@package           Beech_notifications
+*/
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
