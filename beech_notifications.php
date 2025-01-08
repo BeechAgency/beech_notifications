@@ -3,7 +3,7 @@
 Plugin Name:       Beech Notifications
 Plugin URI:        https://beech.agency
 Description:       Create notifications on your site without ads, bloat, and junk typically found in popup and notification plugins.
-Version:           1.4
+Version:           1.5
 Requires at least: 6.5
 Requires PHP: 7.2
 Author:            Beech Agency
@@ -23,13 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'BEECH_NOTIFICATIONS_VERSION', '1.4' );
-
-/**
- * @link              https://github.com/beechagency/
- * @since             1.4
- * @package           Beech_notifications
- */
+define( 'BEECH_NOTIFICATIONS_VERSION', '1.5' );
 
 /**
  * The code that runs during plugin activation.
