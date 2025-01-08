@@ -115,12 +115,13 @@
 						</tr>
 					</table>
 				</div>
+				<!--
 				<div class="tab-content" id="BEECH-tab3" style="display: none;">
                     <h2>Push Notifications</h2>
 					<table class="form-table">
                         <tr valign="top">
 							<th scope="row">Push Notifications are coming eventually. <span class="light">They're pretty complex.</span></th>
-							<!--<td>
+							<td>
 								<div>
 									<input type="text" 
 										name="BEECH_notifications_display_message_box" 
@@ -129,10 +130,11 @@
 										value="<?php echo get_option( 'BEECH_notifications_display_message_box' ); ?>"
 										/>
 								</div>
-							</td>-->
+							</td>
 						</tr>
 					</table>
 				</div>
+				-->
 				<div class="tab-content" id="BEECH-tab4" style="display: none;">
                     <h2>Extra Settings and Sneaky Stuff</h2>
 					<table class="form-table">

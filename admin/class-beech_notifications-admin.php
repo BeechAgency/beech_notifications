@@ -372,7 +372,7 @@ class Beech_notifications_Admin {
 				<option value="popup" <?php selected($type, 'popup'); ?>>Popup</option>
 				<option value="top_bar" <?php selected($type, 'top_bar'); ?>>Top Bar</option>
 				<option value="toast" <?php selected($type, 'toast'); ?>>Toast</option>
-				<option value="push" <?php selected($type, 'push'); ?>>Push</option>
+				<!--<option value="push" <?php selected($type, 'push'); ?>>Push</option>-->
 			</select>
 		</label>
 		<br>

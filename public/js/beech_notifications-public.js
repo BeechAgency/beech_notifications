@@ -1,4 +1,4 @@
-console.log("BEECH NOFITICATIONS LOADED v2");
+//console.log("BEECH NOFITICATIONS LOADED v2");
 
 // Beech Notification JS
 (function () {
@@ -8,7 +8,7 @@ console.log("BEECH NOFITICATIONS LOADED v2");
 
     if (!BEECH_notifications) return false;
 
-    console.log("Notifications: ", BEECH_notifications_data);
+    //console.log("Notifications: ", BEECH_notifications_data);
 
     let n = 0;
 
@@ -70,7 +70,7 @@ console.log("BEECH NOFITICATIONS LOADED v2");
         "[data-beech-notification-id='" + notification.ID + "']"
       );
 
-      console.log('Preparing notification: ', new_notification, notification);
+      //console.log('Preparing notification: ', new_notification, notification);
 
       if(notification.hide_image || !notification.image) new_notification.classList.add('BN--no-image');
       if(notification.hide_title) new_notification.classList.add('BN--no-title');
@@ -98,7 +98,7 @@ console.log("BEECH NOFITICATIONS LOADED v2");
 
     notificationCloseBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log('Click notification');
+      //console.log('Click notification');
       notificationClose(notification);
     });
   }

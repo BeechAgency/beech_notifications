@@ -279,6 +279,7 @@ dialog.BEECH_notifications--popup_dialog::backdrop { backdrop-filter: blur(0px);
 }
 .BEECH_notifications--popup_content--inner  { 
     padding: 2rem;
+    width: 100%;
 }
 
 button.BEECH_notifications--close {
