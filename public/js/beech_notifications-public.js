@@ -4,7 +4,7 @@ class BeechNotifications {
   }
 
   init() {
-    console.log("Beech Notifications v1.5.0");
+    console.log("Beech Notifications v1.5.3");
 
     this.notificationsContainer = document.querySelector(
       ".BEECH_notifications"
@@ -248,19 +248,17 @@ class BeechNotifications {
 
   trackEvent(eventName, eventParams = {}) {
     //console.log("Tracking event:", eventName, eventParams);
-    if (gtag) {
+    if (typeof gtag !== "undefined") {
       //console.log("GA4");
       // Send event to Google Analytics 4 (GA4)
       gtag("event", eventName, eventParams);
-
     } else if (window.dataLayer) {
       //console.log("GTM");
       // Send event to Google Tag Manager (GTM)
       window.dataLayer.push({
         event: eventName,
-        ...eventParams,
+        eventModel: eventParams
       });
-
     } else {
       //console.warn("GTM or GA is not available");
     }
