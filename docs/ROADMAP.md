@@ -29,3 +29,4 @@ There are a lot of ideas for this and it could be made into something really gre
 3. ~~Configure design through the settings~~ Initial version with 1.2
 4. ~~Make notifications work without end date.~~ In 1.4
 5. ~~Give notifications a start date~~ Works with wordpress future publishing status
+6. ~~Google Analyatics events~~

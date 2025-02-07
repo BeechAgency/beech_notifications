@@ -49,6 +49,9 @@ Everything is based on the `.BEECH_notifications` selector. All notifications ar
 
 ## Changelog 
 
+### 1.5 - Refactored the Public JS into a class for more extensibility.
+* Added GA4 / GTM Tracking!
+
 ### 1.4 - Better out of the box. More Customisations
 * Added configuration for default button styles in the options. Will possibly add this at a notification level if necessary.
 * When adding the plugin to a site no config is required to make it look ok.

@@ -1,221 +1,279 @@
-//console.log("BEECH NOFITICATIONS LOADED v2");
+class BeechNotifications {
+  constructor() {
+    document.addEventListener("DOMContentLoaded", () => this.init());
+  }
 
-// Beech Notification JS
-(function () {
-  document.addEventListener("DOMContentLoaded", function () {
+  init() {
+    console.log("Beech Notifications v1.5.0");
 
-    const BEECH_notifications = document.querySelector(".BEECH_notifications");
-
-    if (!BEECH_notifications) return false;
-
-    //console.log("Notifications: ", BEECH_notifications_data);
-
-    let n = 0;
-
-    BEECH_notifications_data.forEach( notification => {
-      const type = notification.type;
-      // Get the template
-
-      const template = document.getElementById(
-        "BEECH_notifications--" + type
-      );
-      const template_clone = template.content.cloneNode(true);
-
-      template_clone.querySelector(".BEECH_notifications--title").textContent = notification.title;
-      template_clone.querySelector(".BEECH_notifications--content").innerHTML = notification.content;
-      template_clone.querySelector(".BEECH_notification").setAttribute('data-beech-notification-id', notification.ID );
-      template_clone
-        .querySelector(".BEECH_notifications--image")
-        .setAttribute("src", notification.image);
-
-
-      // Add data to links
-      const links = template_clone.querySelectorAll(".BEECH_notifications--link");
-      links.forEach(link => {
-        link.setAttribute("href", notification.cta_link);
-      })
-
-      const button = template_clone.querySelector(
-        ".BEECH_notifications--button"
-      );
-
-      if(button) {
-        button.setAttribute("href", notification.cta_link);
-        button.textContent = notification.cta_text;
-      }
-
-      // Append the clone to the appriopriate wrapper.
-      if(type === 'right_corner') {
-
-        let rightWrapper = BEECH_notifications.querySelector(".BEECH_notifications--right-wrapper");
-
-        // If the element doesn't exist create it.
-        if(!rightWrapper) {
-            rightWrapper = document.createElement("div");
-            rightWrapper.className = 'BEECH_notifications--right-wrapper';
-
-            BEECH_notifications.appendChild(rightWrapper);
-
-            rightWrapper = BEECH_notifications.querySelector(
-              ".BEECH_notifications--right-wrapper"
-            );
-        } 
-        rightWrapper.appendChild(template_clone);
-
-      } else {
-        BEECH_notifications.appendChild(template_clone);
-      }
-
-      const new_notification = BEECH_notifications.querySelector(
-        "[data-beech-notification-id='" + notification.ID + "']"
-      );
-
-      //console.log('Preparing notification: ', new_notification, notification);
-
-      if(notification.hide_image || !notification.image) new_notification.classList.add('BN--no-image');
-      if(notification.hide_title) new_notification.classList.add('BN--no-title');
-
-      //console.log(new_notification);
-      const delay = n * 500;
-
-      setTimeout( () => {
-        handleNotification(new_notification);
-      }, delay)
-
-      n++;
-    })
-  });
-
-  function handleNotification(notification) {
-    const classList = notification.classList;
-    const notificationCloseBtn = notification.querySelector(
-      ".BEECH_notifications--close"
+    this.notificationsContainer = document.querySelector(
+      ".BEECH_notifications"
     );
 
-    if (!handleCookies(notification)) return false;
+    if (!this.notificationsContainer || !BEECH_notifications_data) return;
 
-    notificationOpen(notification);
+    this.renderNotifications();
+  }
 
-    notificationCloseBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      //console.log('Click notification');
-      notificationClose(notification);
+  renderNotifications() {
+    let delayMultiplier = 0;
+
+    BEECH_notifications_data.forEach((notification) => {
+      const type = notification.type;
+      const template = document.getElementById(`BEECH_notifications--${type}`);
+      if (!template) return;
+
+      const templateClone = template.content.cloneNode(true);
+      this.populateNotification(templateClone, notification);
+
+      // Determine where to append
+      let appendTarget = this.notificationsContainer;
+      if (type === "right_corner") {
+        appendTarget = this.getOrCreateRightWrapper();
+      }
+
+      // Append to DOM first
+      appendTarget.appendChild(templateClone);
+
+      // Get actual DOM element
+      const newNotification = appendTarget.querySelector(
+        `[data-beech-notification-id='${notification.ID}']`
+      );
+      if (!newNotification) return;
+
+      // Apply additional classes
+      if (notification.hide_image || !notification.image)
+        newNotification.classList.add("BN--no-image");
+      if (notification.hide_title)
+        newNotification.classList.add("BN--no-title");
+
+      this.handleNotificationClickEvents(newNotification);
+
+      setTimeout(() => {
+        this.handleNotification(newNotification);
+      }, delayMultiplier * 500);
+
+      delayMultiplier++;
     });
   }
 
-  function handleCookies(notification, action = "open") {
+  populateNotification(fragment, notification) {
+    fragment.querySelector(".BEECH_notifications--title").textContent =
+      notification.title;
+    fragment.querySelector(".BEECH_notifications--content").innerHTML =
+      notification.content;
+    fragment
+      .querySelector(".BEECH_notification")
+      .setAttribute("data-beech-notification-id", notification.ID);
+    fragment
+      .querySelector(".BEECH_notification")
+      .setAttribute(
+        "data-beech-notification-title",
+        this.escapeAttribute(notification.title)
+      );
+    fragment
+      .querySelector(".BEECH_notification")
+      .setAttribute(
+        "data-beech-notification-cta",
+        this.escapeAttribute(notification.cta_text)
+      );
+    fragment
+      .querySelector(".BEECH_notifications--image")
+      .setAttribute("src", !notification.image ? "" : notification.image);
+
+    // Update links
+    fragment.querySelectorAll(".BEECH_notifications--link").forEach((link) => {
+      link.setAttribute("href", notification.cta_link);
+    });
+
+    const button = fragment.querySelector(".BEECH_notifications--button");
+    if (button) {
+      button.setAttribute("href", notification.cta_link);
+      button.textContent = notification.cta_text;
+    }
+  }
+
+  getOrCreateRightWrapper() {
+    let wrapper = this.notificationsContainer.querySelector(
+      ".BEECH_notifications--right-wrapper"
+    );
+    if (!wrapper) {
+      wrapper = document.createElement("div");
+      wrapper.className = "BEECH_notifications--right-wrapper";
+      this.notificationsContainer.appendChild(wrapper);
+    }
+    return wrapper;
+  }
+
+  handleNotification(notification) {
+    if (!this.handleCookies(notification)) return;
+    this.notificationOpen(notification);
+
+    const closeBtn = notification.querySelector(".BEECH_notifications--close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        this.notificationClose(notification);
+      });
+    }
+  }
+
+  handleCookies(notification, action = "open") {
     if (!notification) return false;
 
     const {
       name: cookieName,
+      id: notificationId,
       days,
-      id: notificationId
-    } = makeCookieData(notification);
-
-    //console.log('Cookies!');
-    const cookieRead = getCookie(cookieName);
-    const cookieIds = cookieRead.split(",");
+    } = this.makeCookieData(notification);
+    const cookieRead = this.getCookie(cookieName);
+    const cookieIds = cookieRead ? cookieRead.split(",") : [];
     const newCookieValue = [notificationId, ...cookieIds];
 
+    if (action === "open" && cookieIds.includes(notificationId)) return false;
+    if (action === "close")
+      this.setCookie(cookieName, newCookieValue.join(","), days);
 
-    if (action === "open") {
-      if ( cookieIds.includes( notificationId ) ) return false;
-    
-      return true;
-    }
-
-    if (action === "close") {
-      setCookie(cookieName, newCookieValue, days);
-
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
-  function makeCookieData(notification) {
-    const dataset = notification.dataset;
-    const type = dataset.beechNotificationType;
-    const id = dataset.beechNotificationId;
-    const days = dataset.beechNotificationDays;
-
-    //console.log(notification, dataset);
-
+  makeCookieData(notification) {
     return {
-      name: `BEECH_notifications`,
-      id : id,
-      value: id,
-      days,
+      name: "BEECH_notifications",
+      id: notification.dataset.beechNotificationId,
+      days: notification.dataset.beechNotificationDays || 7,
     };
   }
 
-  function notificationOpen(notification) {
-    const type = notification.dataset.beechNotificationType;
+  notificationOpen(notification) {
+    const dataset = notification.dataset;
+    const type = dataset.beechNotificationType;
+    const id = dataset.beechNotificationId;
+    const title = dataset.beechNotificationTitle;
+    const cta = dataset.beechNotificationCta;
+
+    this.trackEvent("notification_open", {
+      notification_type: type,
+      notification_id: id || "Unknown",
+      notification_title: title || "",
+      notification_cta: cta || "",
+    });
 
     if (type === "popup") {
-      const dialog = notification.querySelector("dialog");
-      dialog.showModal();
+      notification.querySelector("dialog")?.showModal();
     }
 
     setTimeout(() => {
       notification.classList.add("BEECH__opening");
-
       setTimeout(() => {
         notification.classList.add("BEECH__open");
         notification.classList.remove("BEECH__opening");
-
       }, 25);
     }, 1000);
   }
 
-  function notificationClose(notification) {
-    const type = notification.dataset.beechNotificationType;
+  notificationClose(notification, suppressEvent = false) {
+    const dataset = notification.dataset;
+    const type = dataset.beechNotificationType;
+    const id = dataset.beechNotificationId;
+    const title = dataset.beechNotificationTitle;
+    const cta = dataset.beechNotificationCta;
 
+    if(!suppressEvent) {
+      this.trackEvent("notification_close", {
+        notification_type: type,
+        notification_id: id || "Unknown",
+        notification_title: title || "",
+        notification_cta: cta || "",
+      });
+    }
 
     setTimeout(() => {
       notification.classList.add("BEECH__closing");
-
       setTimeout(() => {
-        notification.classList.remove("BEECH__open");
-        notification.classList.remove("BEECH__closing");
-
-        
-        if (type === "popup") {
-          const dialog = notification.querySelector("dialog");
-          dialog.close();
-        }
-
+        notification.classList.remove("BEECH__open", "BEECH__closing");
         notification.remove();
       }, 1000);
     }, 100);
 
-    handleCookies(notification, "close");
+    this.handleCookies(notification, "close");
   }
 
-  /* Thank you W3 Schools */
-  function setCookie(cname, cvalue, exdays) {
+  notificationClick(notification) {
+    const dataset = notification.dataset;
+    const type = dataset.beechNotificationType;
+    const id = dataset.beechNotificationId;
+    const title = dataset.beechNotificationTitle;
+    const cta = dataset.beechNotificationCta;
+
+    this.trackEvent("notification_click", {
+      notification_type: type,
+      notification_id: id || "Unknown",
+      notification_title: title || "",
+      notification_cta: cta || "",
+    });
+  }
+
+  handleNotificationClickEvents(notification) {
+    const button = notification.querySelector(".BEECH_notifications--button");
+
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const link = e.currentTarget;
+      const url = link.href;
+      console.log("Delaying the inevitablery", url);
+
+      this.notificationClick(notification);
+      this.notificationClose(notification, true);
+
+      // Delay the redirect
+      setTimeout(() => {
+        window.location.href = url;
+      }, 250);
+    });
+  }
+
+  setCookie(name, value, days) {
     const d = new Date();
-    d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-    let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
   }
 
-  function getCookie(cname) {
-    let name = cname + "=";
-    let ca = document.cookie.split(";");
-    for (let i = 0; i < ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == " ") {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+  getCookie(name) {
+    return document.cookie.split(";").reduce((acc, cookie) => {
+      const [key, val] = cookie.split("=");
+      return key.trim() === name ? val : acc;
+    }, "");
+  }
+
+  trackEvent(eventName, eventParams = {}) {
+    //console.log("Tracking event:", eventName, eventParams);
+    if (gtag) {
+      //console.log("GA4");
+      // Send event to Google Analytics 4 (GA4)
+      gtag("event", eventName, eventParams);
+
+    } else if (window.dataLayer) {
+      //console.log("GTM");
+      // Send event to Google Tag Manager (GTM)
+      window.dataLayer.push({
+        event: eventName,
+        ...eventParams,
+      });
+
+    } else {
+      //console.warn("GTM or GA is not available");
     }
-    return "";
   }
 
-  
-})();
+  escapeAttribute(value) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+}
 
-
+new BeechNotifications();
