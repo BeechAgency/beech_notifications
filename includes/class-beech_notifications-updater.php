@@ -9,12 +9,30 @@ class Beech_notifications_updater {
     private $repository;    
     private $authorize_token;
     private $github_response;
+    private $logging = false;
+    private $log_file;
+    
 
     public function __construct( $file ) {
         $this->file = $file;
         add_action( 'admin_init', array( $this, 'set_plugin_properties' ) );
 
+        $upload_dir = wp_upload_dir();
+	    $this->log_file = trailingslashit( $upload_dir['basedir'] ) . 'beech_notificaitons_update_log.txt';
+
         return $this;
+    }
+
+    private function log($message) {
+        if ( !$this->logging ) return;
+
+        $timestamp = date("Y-m-d H:i:s");
+        file_put_contents($this->log_file, "[$timestamp] $message" . PHP_EOL, FILE_APPEND);
+        //error_log( print_r("GitUpdater: [$timestamp] $message"));
+    }
+
+    public function set_logging( $status = false ) {
+        $this->logging =  $status;
     }
 
     public function set_plugin_properties() {
@@ -66,6 +84,8 @@ class Beech_notifications_updater {
         if ($http_code == 200) {
             $this->github_response = json_decode($response);
 
+            $this->log("Finding the version ". print_r($this->github_response, true));
+            $this->log("Finding the version->tag_name ". print_r($this->github_response->tag_name, true));
         } 
     
         return;
@@ -126,22 +146,21 @@ class Beech_notifications_updater {
             $new_files = $git_response->assets[0]->browser_download_url;
         }
 
-        if (isset($git_response->assets[0]->id)) {
-            $asset_id = $this->github_response->assets[0]->id;
-            $new_files = "https://api.github.com/repos/{$this->username}/{$this->repository}/releases/assets/{$asset_id}";
+        if (isset($git_response->assets[0]->browser_download_url)) {
+            $new_files = $git_response->assets[0]->browser_download_url;
         }
 
         $slug = current( explode('/', $this->basename ) ); // Create valid slug
         $this->package_url = $new_files;
 
-        $theme = array( // setup our theme info
-            'url' => 'https://github.com/'.$this->username.'/'.$this->repository,
-            'slug' => 'beechagency2023',
+        $plugin = array( // setup our theme info
+            'url' => $this->plugin["PluginURI"],
+            'slug' => $slug,
             'package' => $new_files,
             'new_version' => $github_version
         );
 
-        $transient->response[$this->basename] = $theme; // Return it in response
+        $transient->response[$this->basename] = (object) $plugin;  // Return it in response
 
         return $transient; // Return filtered transient
     }
@@ -154,11 +173,11 @@ class Beech_notifications_updater {
 
                 $this->get_repository_info(); // Get our repo info
                 
-                $download_link = $this->github_response['zipball_url']; // Get the ZIP
+                $download_link = $this->github_response->zipball_url; // Get the ZIP
 
                 // If there are theme assets attached, use those instead!
-                if( isset($this->git_response['assets']) && is_countable($this->git_response['assets']) && count($this->git_response['assets']) > 0 ) {
-                    $download_link = $this->git_response['assets'][0]['browser_download_url'];
+                if( isset($git_response->assets) && is_countable($git_response->assets) && count($git_response->assets) > 0 ) {
+                    $download_link = $git_response->assets[0]->browser_download_url;
                 }
 
                 // Set it to an array
@@ -171,15 +190,15 @@ class Beech_notifications_updater {
                     'num_ratings'				=> '5',
                     'downloaded'				=> '5',
                     'added'							=> '2024-03-01',
-                    'version'			=> $this->github_response['tag_name'],
+                    'version'			=> $this->github_response->tag_name,
                     'author'			=> $this->plugin["AuthorName"],
                     'author_profile'	=> $this->plugin["AuthorURI"],
-                    'last_updated'		=> $this->github_response['published_at'],
+                    'last_updated'		=> $this->github_response->published_at,
                     'homepage'			=> $this->plugin["PluginURI"],
                     'short_description' => $this->plugin["Description"],
                     'sections'			=> array(
                         'Description'	=> $this->plugin["Description"],
-                        'Updates'		=> $this->github_response['body'],
+                        'Updates'		=> $this->github_response->body,
                     ),
                     'download_link'		=> $download_link
                 );
