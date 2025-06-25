@@ -309,6 +309,7 @@ class Beech_notifications_Public {
 			// @TODO - only output the templates that are required.
 			echo '<div class="BEECH_notifications_templates">';
 			include plugin_dir_path(__FILE__) . 'partials/beech_notifications-template--right_corner.php';
+			include plugin_dir_path(__FILE__) . 'partials/beech_notifications-template--right_corner_alt.php';
 			include plugin_dir_path(__FILE__) . 'partials/beech_notifications-template--popup.php';
 			include plugin_dir_path(__FILE__) . 'partials/beech_notifications-template--toast.php';
 			include plugin_dir_path(__FILE__) . 'partials/beech_notifications-template--top_bar.php';

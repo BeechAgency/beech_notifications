@@ -36,24 +36,39 @@ class Beech_notifications_updater {
     }
 
     private function get_repository_info() {
-        if ( is_null( $this->github_response ) ) { // Do we have a response?
-        $args = array();
-            $request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases', $this->username, $this->repository ); // Build URI
-            
-        $args = array();
-
-            if( $this->authorize_token ) { // Is there an access token?
-                $args['headers']['Authorization'] = "token {$this->authorize_token}"; // Set the headers
-            }
-
-            $response = json_decode( wp_remote_retrieve_body( wp_remote_get( $request_uri, $args ) ), true ); // Get JSON and parse it
-
-            if( is_array( $response ) ) { // If it is an array
-                $response = current( $response ); // Get the first item
-            }
-
-            $this->github_response = $response; // Set it to our property
+        if ( !is_null( $this->github_response ) ) {
+            return; // We already have a response so bail.
         }
+    
+        $args = array();
+        $request_uri = sprintf( 'https://api.github.com/repos/%s/%s/releases/latest', $this->username, $this->repository ); // Build URI
+    
+        $this->request_uri = $request_uri;
+    
+        $headers = array(
+            'User-Agent: ' . $this->username,
+        );
+    
+        if ($this->authorize_token) {
+            $headers[] = 'Authorization: token ' . $this->authorize_token;
+        }
+    
+        $ch = curl_init($request_uri);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+    
+        if ($http_code == 200) {
+            $this->github_response = json_decode($response);
+
+        } 
+    
+        return;
     }
 
     public function initialize() {
@@ -72,30 +87,61 @@ class Beech_notifications_updater {
 
     public function modify_transient( $transient ) {
 
-        if( property_exists( $transient, 'checked') ) { // Check if transient has a checked property
-
-            if( $checked = $transient->checked ) { // Did Wordpress check for updates?
-                $this->get_repository_info(); // Get the repo info
-
-                $out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' ); // Check if we're out of date
-
-                if( $out_of_date ) {
-
-                    $new_files = $this->github_response['zipball_url']; // Get the ZIP
-
-                    $slug = current( explode('/', $this->basename ) ); // Create valid slug
-
-                    $plugin = array( // setup our plugin info
-                        'url' => $this->plugin["PluginURI"],
-                        'slug' => $slug,
-                        'package' => $new_files,
-                        'new_version' => $this->github_response['tag_name']
-                    );
-
-                    $transient->response[$this->basename] = (object) $plugin; // Return it in response
-                }
-            }
+        if( !property_exists( $transient, 'checked') ) {
+            return $transient;
         }
+        if( !$transient->checked ) {
+            return $transient; // Did Wordpress check for updates?
+        }
+
+        $checked = $transient->checked;
+        
+        $this->get_repository_info(); // Get the repo info
+        
+
+        if( gettype($this->github_response) === "boolean" ) { 
+            return $transient; 
+        }
+
+        $github_version = filter_var($this->github_response->tag_name, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+
+        $out_of_date = version_compare( 
+            $github_version, 
+            $checked[ $this->basename ], 
+            'gt' 
+        ); // Check if we're out of date
+
+
+        // If she not out of date get outta here.
+        if( !$out_of_date )  {
+            return $transient; 
+        }
+
+        $git_response = $this->github_response;
+
+        $new_files = $this->github_response->zipball_url; // Get the ZIP
+
+        // If there are theme assets attached, use those instead!
+        if( isset($git_response->assets) && is_countable($git_response->assets) && count($git_response->assets) > 0 ) {
+            $new_files = $git_response->assets[0]->browser_download_url;
+        }
+
+        if (isset($git_response->assets[0]->id)) {
+            $asset_id = $this->github_response->assets[0]->id;
+            $new_files = "https://api.github.com/repos/{$this->username}/{$this->repository}/releases/assets/{$asset_id}";
+        }
+
+        $slug = current( explode('/', $this->basename ) ); // Create valid slug
+        $this->package_url = $new_files;
+
+        $theme = array( // setup our theme info
+            'url' => 'https://github.com/'.$this->username.'/'.$this->repository,
+            'slug' => 'beechagency2023',
+            'package' => $new_files,
+            'new_version' => $github_version
+        );
+
+        $transient->response[$this->basename] = $theme; // Return it in response
 
         return $transient; // Return filtered transient
     }
@@ -107,6 +153,13 @@ class Beech_notifications_updater {
             if( $args->slug == current( explode( '/' , $this->basename ) ) ) { // And it's our slug
 
                 $this->get_repository_info(); // Get our repo info
+                
+                $download_link = $this->github_response['zipball_url']; // Get the ZIP
+
+                // If there are theme assets attached, use those instead!
+                if( isset($this->git_response['assets']) && is_countable($this->git_response['assets']) && count($this->git_response['assets']) > 0 ) {
+                    $download_link = $this->git_response['assets'][0]['browser_download_url'];
+                }
 
                 // Set it to an array
                 $plugin = array(
@@ -128,7 +181,7 @@ class Beech_notifications_updater {
                         'Description'	=> $this->plugin["Description"],
                         'Updates'		=> $this->github_response['body'],
                     ),
-                    'download_link'		=> $this->github_response['zipball_url']
+                    'download_link'		=> $download_link
                 );
 
                 return (object) $plugin; // Return the data
@@ -139,14 +192,22 @@ class Beech_notifications_updater {
     }
 
     public function download_package( $args, $url ) {
-        if ( null !== $args['filename'] ) {
-            if( $this->authorize_token ) { 
-                $args = array_merge( $args, array( "headers" => array( "Authorization" => "token {$this->authorize_token}" ) ) );
-            }
+        if (strpos($url, $this->username . '/' . $this->repository) === false) {
+            return $args;
         }
-        
-        remove_filter( 'http_request_args', [ $this, 'download_package' ] );
-
+    
+        if ($this->authorize_token) {
+            $this->log("Secure download required for $url");
+            if (!isset($args['headers'])) {
+                $args['headers'] = [];
+            }
+    
+            $args['headers']['Authorization'] = "token {$this->authorize_token}";
+            $args['headers']['Accept'] = "application/octet-stream"; // Important for GitHub asset downloads
+        }
+    
+        remove_filter('http_request_args', [$this, 'download_package']);
+    
         return $args;
     }
 

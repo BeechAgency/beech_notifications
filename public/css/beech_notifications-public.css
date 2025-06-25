@@ -71,6 +71,19 @@
     max-width: 5rem;
     border-radius: 0.25rem;
 }
+.BEECH_notifications--right_corner_content.BEECH_notifications--right_corner_content--alt {
+    flex-direction: column;
+    padding: 0rem;
+}
+.BEECH_notifications--right_corner_content.BEECH_notifications--right_corner_content--alt .BEECH_notifications--right_corner_image {
+    aspect-ratio : 21 / 9;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+}
+.BEECH_notifications--right_corner_content.BEECH_notifications--right_corner_content--alt .BEECH_notifications--right_corner_content--inner {
+    padding: 0 1rem 1rem;
+}
 
 /* TOAST! */
 .BEECH_notifications--toast {

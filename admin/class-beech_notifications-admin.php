@@ -369,6 +369,7 @@ class Beech_notifications_Admin {
 			<span>Type:</span>
 			<select name="type" id="type">
 				<option value="right_corner" <?php selected($type, 'right_corner'); ?>>Right Corner</option>
+				<option value="right_corner_alt" <?php selected($type, 'right_corner_alt'); ?>>Right Corner - Big Image</option>
 				<option value="popup" <?php selected($type, 'popup'); ?>>Popup</option>
 				<option value="top_bar" <?php selected($type, 'top_bar'); ?>>Top Bar</option>
 				<option value="toast" <?php selected($type, 'toast'); ?>>Toast</option>

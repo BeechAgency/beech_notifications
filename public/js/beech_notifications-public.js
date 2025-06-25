@@ -20,6 +20,8 @@ class BeechNotifications {
 
     BEECH_notifications_data.forEach((notification) => {
       const type = notification.type;
+      if (!type) return;
+
       const template = document.getElementById(`BEECH_notifications--${type}`);
       if (!template) return;
 
@@ -28,7 +30,7 @@ class BeechNotifications {
 
       // Determine where to append
       let appendTarget = this.notificationsContainer;
-      if (type === "right_corner") {
+      if (type === "right_corner" || type === "right_corner_alt") {
         appendTarget = this.getOrCreateRightWrapper();
       }
 

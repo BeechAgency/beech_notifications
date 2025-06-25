@@ -3,7 +3,7 @@
 Plugin Name:       Beech Notifications
 Plugin URI:        https://beech.agency
 Description:       Create notifications on your site without ads, bloat, and junk typically found in popup and notification plugins.
-Version:           1.5
+Version:           1.6
 Requires at least: 6.5
 Requires PHP: 7.2
 Author:            Beech Agency
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Currently plugin version.
  */
-define( 'BEECH_NOTIFICATIONS_VERSION', '1.5' );
+define( 'BEECH_NOTIFICATIONS_VERSION', '1.6' );
 
 /**
  * The code that runs during plugin activation.
